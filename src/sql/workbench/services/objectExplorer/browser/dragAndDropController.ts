@@ -11,11 +11,12 @@ import { DragMouseEvent } from 'vs/base/browser/mouseEvent';
 import { TreeUpdateUtils } from 'sql/workbench/services/objectExplorer/browser/treeUpdateUtils';
 import { UNSAVED_GROUP_ID } from 'sql/platform/connection/common/constants';
 import { IDragAndDropData } from 'vs/base/browser/dnd';
+import { TreeNode } from 'sql/workbench/services/objectExplorer/common/treeNode';
 
 /**
  * Implements drag and drop for the server tree
  */
-export class ServerTreeDragAndDrop implements IDragAndDrop {
+export class TreeDragAndDrop implements IDragAndDrop {
 
 	constructor(
 		@IConnectionManagementService private _connectionManagementService: IConnectionManagementService,
@@ -27,11 +28,13 @@ export class ServerTreeDragAndDrop implements IDragAndDrop {
 	 * Returns null, otherwise.
 	 */
 	public getDragURI(tree: ITree, element: any): string {
+		// TODO: Needs to be more specific than if element
 		if (element instanceof ConnectionProfile) {
 			return (<ConnectionProfile>element).id;
-		}
-		else if (element instanceof ConnectionProfileGroup) {
+		} else if (element instanceof ConnectionProfileGroup) {
 			return (<ConnectionProfileGroup>element).id;
+		} else if (element instanceof TreeNode) {
+			return (<TreeNode>element).id;
 		}
 		return null;
 	}
@@ -44,7 +47,10 @@ export class ServerTreeDragAndDrop implements IDragAndDrop {
 			return (<ConnectionProfile>elements[0]).serverName;
 		} else if (elements[0] instanceof ConnectionProfileGroup) {
 			return (<ConnectionProfileGroup>elements[0]).name;
-		} else {
+		} else if (elements[0].label) {
+			return elements[0].label;
+		}
+		else {
 			return undefined;
 		}
 	}
