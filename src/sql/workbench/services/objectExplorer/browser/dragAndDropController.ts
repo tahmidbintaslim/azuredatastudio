@@ -28,12 +28,12 @@ export class TreeDragAndDrop implements IDragAndDrop {
 	 * Returns null, otherwise.
 	 */
 	public getDragURI(tree: ITree, element: any): string {
-		// TODO: Needs to be more specific than if element
 		if (element instanceof ConnectionProfile) {
 			return (<ConnectionProfile>element).id;
 		} else if (element instanceof ConnectionProfileGroup) {
 			return (<ConnectionProfileGroup>element).id;
-		} else if (element instanceof TreeNode) {
+
+		} else if (element.nodeTypeId === 'Table' || element.nodeTypeId === 'Column') {
 			return (<TreeNode>element).id;
 		}
 		return null;
