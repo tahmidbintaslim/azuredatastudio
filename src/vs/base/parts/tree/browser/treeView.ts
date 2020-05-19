@@ -1367,7 +1367,6 @@ export class TreeView extends HeightMap {
 				this.currentDropTargets = [];
 				this.currentDropDisposable.dispose();
 			}
-
 			this.cancelDragAndDropScrollInterval();
 			this.currentDropTarget = null;
 			this.currentDropElement = null;
